@@ -41,16 +41,43 @@ def display_data_viz():
     FROM data
     GROUP BY Country
     ORDER BY Affiliation_by_country DESC
-    LIMIT 10
     """
     pays = duckdb.sql(pays_q).df()
 
-    pays_count_q = """
-    SELECT Country, COUNT(*) AS Affiliation_by_country
-    FROM data
-    GROUP BY Country
+    # Requête DuckDB recruting statut
+
+    statut_q = """
+        SELECT "Recruitment status", COUNT(*) AS nb_status
+        FROM data
+        GROUP BY "Recruitment status"
+        ORDER BY nb_status DESC
+        """
+    statut = duckdb.sql(statut_q).df()
+
+    # Requête DuckDB duration by publication type
+
+    pub_q="""
+    SELECT 
+    "Publication type" AS type, 
+    COUNT(*) AS duration_count
+    FROM publications
+    GROUP BY type
+    ORDER BY type ASC;
     """
-    pays_count = duckdb.sql(pays_q).df()
+    pub = duckdb.sql(pub_q).df()
+
+    # Requête DuckDB population age
+
+    pop_age_q = """
+        SELECT 
+        "Population age" AS Age, 
+        COUNT(*) AS age_count
+        FROM authors
+        GROUP BY Age
+        HAVING Age not null
+        ORDER BY age_count ASC;
+        """
+    pop_age = duckdb.sql(pop_age_q).df()
 
     # CSS pour le style des métriques
     st.markdown(
@@ -60,6 +87,7 @@ def display_data_viz():
             padding: 10px;
             margin: 24px;
             margin-bottom: 24px;
+            background-color: whitesmoke;
             border-radius: 8px;
             border: 1px solid black;
             text-align: left;
@@ -106,7 +134,7 @@ def display_data_viz():
         display_big_metric("Authors", nb_authors['nb_authors'].iloc[0])
 
     with col2:
-        display_big_metric("Countries", pays_count.shape[0])
+        display_big_metric("Countries", pays.shape[0])
 
     with col3:
         display_big_metric("Publications", publications.shape[0])
@@ -118,18 +146,38 @@ def display_data_viz():
     col_left, col_right = st.columns(2)
 
     with col_left:
-        st.subheader("Top 10 Authors", divider=True)
+        st.subheader("Top Authors", divider=True)
         st.bar_chart(top_authors, x="Authors", y="Occurence", color="Authors", horizontal=True)
 
     with col_right:
-        st.subheader("Top 10 Countries", divider=True)
-        st.bar_chart(pays, x="Country", y="Affiliation_by_country")
+        st.subheader("Top Countries", divider=True)
+        st.bar_chart(pays.head(10), x="Country", y="Affiliation_by_country")
+
+
+    # Afficher les graphiques
+    col_left, col_right = st.columns(2)
+
+    with col_left:
+        st.subheader("Recruitment status", divider=True)
+        st.bar_chart(statut, x="Recruitment status", y="nb_status", color="Recruitment status")
 
 
 
+    with col_right:
+        st.subheader("Age of population to be analyzed", divider=True)
+        st.bar_chart(pop_age, x="Age", y="age_count", color="Age",horizontal=True)
+
+    st.subheader("Duration by publication type", divider=True)
+    st.bar_chart(pub, x="type", y="duration_count", color="type",horizontal=True)
+
+    st.subheader("Countries by affiliation", divider=True)
     st.bar_chart(pays, x="Country", y="Affiliation_by_country", color="Country")
 
     # Afficher les données
+    st.subheader("Data bases", divider=True)
+    st.write("Affiliations")
     st.dataframe(data)
+    st.write("Authors")
     st.dataframe(authors)
+    st.write("Publications")
     st.dataframe(publications)

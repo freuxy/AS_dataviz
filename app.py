@@ -3,7 +3,6 @@ from pages.home import display_home
 from pages.dataviz import display_data_viz
 from pages.Onto_API_REST import display_onto_api
 
-
 # ---- PAGE SETUP ----
 st.set_page_config(page_title="Multi Page App", layout="wide")
 
