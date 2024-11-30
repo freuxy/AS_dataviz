@@ -1,0 +1,13 @@
+pip~=24.0
+attrs~=23.2.0
+protobuf~=5.26.1
+Pillow~=10.0.1
+tornado~=6.3.3
+Jinja2~=3.1.4
+setuptools~=69.5.1
+packaging~=24.2
+pyparsing~=3.1.1
+typing_extensions~=4.12.2
+matplotlib~=3.8.0
+streamlit~=1.40.2
+pandas~=2.1.1
