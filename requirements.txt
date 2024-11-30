@@ -11,3 +11,4 @@ typing_extensions~=4.12.2
 matplotlib~=3.8.0
 streamlit~=1.40.2
 pandas~=2.1.1
+duckdb
