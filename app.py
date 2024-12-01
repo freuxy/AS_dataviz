@@ -12,7 +12,7 @@ st.set_page_config(page_title="ArcaScience Test", layout="wide")
 st.sidebar.image(
     "./files/images.png",
     use_container_width=True,
-    caption="ArcaScience.io"
+    caption="Boris Sessou submission"
 )
 
 # ---- Définir les pages sans exécuter immédiatement leurs fonctions ---
