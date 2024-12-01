@@ -39,13 +39,13 @@ def display_onto_api():
                 response = requests.get(api_url)
                 if response.status_code == 200:
                     # Si la requête réussit, afficher les résultats
-                    st.write("Résultats de l'API :")
+                    st.write("API results :")
                     st.json(response.json())  # Affiche la réponse JSON
                 else:
-                    st.error(f"Erreur lors de la récupération des données. Code d'état : {response.status_code}")
+                    st.error(f"Error during data recovery. Status code : {response.status_code}")
             except requests.exceptions.RequestException as e:
                 # Si une erreur de connexion ou autre se produit
-                st.error(f"Erreur lors de l'appel API : {e}")
+                st.error(f"Error during API call : {e}")
 
     onto_q = """
             SELECT *
@@ -62,10 +62,19 @@ def display_onto_api():
 
     st.subheader("Information on using api", divider=True)
     st.markdown("""
-    **Points de terminaison disponibles :**
-    - `/` : Récupérer les relations parents-enfants.
+    **Available termination points :**
+    - `/` : Recovering parent-child relationships.
+    
+    ** API online:
+    https://as-test-api.onrender.com
+    
+    ** API online use case :**
+    ```bash
+    https://as-test-api.onrender.com/?id=http://entity/CST/OCCLUS%20CAROTID"
+    ```
 
-    **Exemple d'utilisation via `curl` :**
+
+    **`curl` use case :**
     ```bash
     curl -X GET "http://127.0.0.1:8000/?id=http://entity/CST/OCCLUS%20CAROTID"
     ```
