@@ -1,10 +1,35 @@
 import streamlit as st
 import pandas as pd
 import duckdb
+import os
+import logging
+from init_db import init_db
+
+
+
 
 def display_data_viz():
+
+    st.markdown(
+        """
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    if "data" not in os.listdir():
+        logging.error(os.listdir())
+        logging.error("creating data repository")
+        os.mkdir("data")
+
+    if "database.duckdb" not in os.listdir("data"):
+        init_db()
+
+    con = duckdb.connect(database="data/database.duckdb", read_only=False)
+
     st.title(":material/analytics: Data Visualization")
-    st.write("Visualisez vos données ici.")
+    st.write("View your data here.")
 
     # Charger les données
     data = pd.read_excel('./data/kol_csv_29_07_2024_drug_and_kol_standardized.xlsx')
@@ -87,7 +112,7 @@ def display_data_viz():
             padding: 10px;
             margin: 24px;
             margin-bottom: 24px;
-            background-color: whitesmoke;
+            background-color: white;
             border-radius: 8px;
             border: 1px solid black;
             text-align: left;
@@ -108,20 +133,30 @@ def display_data_viz():
             margin-top: 5px;
             color: #28a745;
         }
+        
+        .material-icons{
+            font-size:28px; 
+            vertical-align:middle; 
+            color: #007BFF;
+        }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    # Fonction pour afficher une métrique stylisée
-    def display_big_metric(title, value, delta=None):
-        delta_html = f"<div class='rect-metric-delta'>{delta}</div>" if delta else ""
+    def display_big_metric(title, value, delta=None, icon=None):
+        icon_html = f"<span class='material-icons'>{icon}</span>" if icon else ""
+        delta_html = f"<div class='rect-metric-delta' style='font-size:12px; color:green;'>{delta}</div>" if delta else ""
+
         st.markdown(
             f"""
-            <div class='rect-metric'>
-                <div class='rect-metric-title'>{title}</div>
-                <div class='rect-metric-value'>{value}</div>
-                {delta_html}
+            <div class='rect-metric' style='display: flex; align-items: center; margin-bottom: 16px;'>
+                {icon_html} <!-- Insertion de l'icône ici -->
+                <div style='margin-left: 8px;'> <!-- Ajout d'un espace entre l'icône et le texte -->
+                    <div class='rect-metric-title' style='font-size: 14px; color: #6c757d;'>{title}</div>
+                    <div class='rect-metric-value' style='font-size: 24px; font-weight: bold;'>{value}</div>
+                    {delta_html}
+                </div>
             </div>
             """,
             unsafe_allow_html=True
@@ -131,16 +166,41 @@ def display_data_viz():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        display_big_metric("Authors", nb_authors['nb_authors'].iloc[0])
+        display_big_metric(
+            title="Authors",
+            value=nb_authors['nb_authors'].iloc[0],
+            delta="+0%",
+            icon="group"
+        )
+        #display_big_metric("Authors", nb_authors['nb_authors'].iloc[0], "")
 
     with col2:
-        display_big_metric("Countries", pays.shape[0])
+        display_big_metric(
+            title="Countries",
+            value=pays.shape[0],
+            delta="+0%",
+            icon="flag"
+        )
 
     with col3:
-        display_big_metric("Publications", publications.shape[0])
+        display_big_metric(
+            title="Publications",
+            value=publications.shape[0],
+            delta="+0%",
+            icon="auto_stories"
+        )
+
+
 
     with col4:
-        display_big_metric("Affilitions", data.shape[0])
+        display_big_metric(
+            title="Affiliations",
+            value=data.shape[0],
+            delta="+0%",
+            icon="cloud"
+        )
+
+        #display_big_metric("Affilitions", data.shape[0])
 
     # Afficher les graphiques
     col_left, col_right = st.columns(2)

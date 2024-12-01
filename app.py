@@ -3,19 +3,42 @@ from pages.home import display_home
 from pages.dataviz import display_data_viz
 from pages.Onto_API_REST import display_onto_api
 
+
 # ---- PAGE SETUP ----
-st.set_page_config(page_title="Multi Page App", layout="wide")
+st.set_page_config(page_title="ArcaScience Test", layout="wide")
 
-# ---- MENU DE NAVIGATION ----
-st.sidebar.title("Navigation")
-menu = st.sidebar.radio("Sélectionner une page", [" :material/home: Home", " :material/analytics: DataViz", " :material/cloud: Onto_API_REST"])
 
-# ---- Affichage de la page en fonction de la sélection ----
-if menu == " :material/home: Home":
-    display_home()
+# ---- LOGO DANS LA BARRE LATÉRALE ----
+st.sidebar.image(
+    "./files/images.png",
+    use_container_width=True,
+    caption="ArcaScience.io"
+)
 
-elif menu == " :material/analytics: DataViz":
-    display_data_viz()
+# ---- Définir les pages sans exécuter immédiatement leurs fonctions ---
+home_page = st.Page(
+    page=display_home,  # Référence à la fonction, pas un appel
+    title="Home",
+    icon=":material/home:"
+)
 
-elif menu == " :material/cloud: Onto_API_REST":
-    display_onto_api()
+dataviz = st.Page(
+    page=display_data_viz,  # Référence à la fonction
+    title="KOL dataviz",
+    icon=":material/analytics:"
+)
+
+onto_api_rest = st.Page(
+    page=display_onto_api,  # Référence à la fonction
+    title="Onto_api_rest",
+    icon=":material/cloud:"
+)
+
+# ---- NAVIGATION SETUP ----
+pg = st.navigation(
+    [
+        home_page, dataviz, onto_api_rest
+    ]
+)
+
+pg.run()
