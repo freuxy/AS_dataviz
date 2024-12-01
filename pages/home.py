@@ -2,7 +2,7 @@ import streamlit as st
 
 def display_home():
     st.title("🏠 ArcaScience technical test")
-    st.write("How to use this app")
+    st.write("Boris SESSOU soumission")
 
     # Afficher les graphiques
     col_left, col_right = st.columns(2)
