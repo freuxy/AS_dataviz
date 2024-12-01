@@ -46,19 +46,19 @@ def display_data_viz():
 
     # Requête DuckDB pour les auteurs
     authors_q = """   
-    SELECT DISTINCT COUNT(ID) AS nb_authors
+    SELECT DISTINCT COUNT("Author ID") AS nb_authors
     FROM authors
     """
 
     top_authors_q = """
-    SELECT Name AS Authors, nb_occurence AS Occurence
+    SELECT Name AS Authors, "Number of occurrence" AS Occurence
     FROM authors
     ORDER BY Occurence DESC
     LIMIT 10
     """
 
-    nb_authors = duckdb.sql(authors_q).df()
-    top_authors = duckdb.sql(top_authors_q).df()
+    nb_authors = con.execute(authors_q).df()
+    top_authors = con.execute(top_authors_q).df()
 
     # Requête DuckDB countries
     pays_q = """
@@ -67,7 +67,7 @@ def display_data_viz():
     GROUP BY Country
     ORDER BY Affiliation_by_country DESC
     """
-    pays = duckdb.sql(pays_q).df()
+    pays = con.execute(pays_q).df()
 
     # Requête DuckDB recruting statut
 
@@ -77,7 +77,7 @@ def display_data_viz():
         GROUP BY "Recruitment status"
         ORDER BY nb_status DESC
         """
-    statut = duckdb.sql(statut_q).df()
+    statut = con.execute(statut_q).df()
 
     # Requête DuckDB duration by publication type
 
@@ -89,7 +89,7 @@ def display_data_viz():
     GROUP BY type
     ORDER BY type ASC;
     """
-    pub = duckdb.sql(pub_q).df()
+    pub = con.execute(pub_q).df()
 
     # Requête DuckDB population age
 
@@ -102,7 +102,7 @@ def display_data_viz():
         HAVING Age not null
         ORDER BY age_count ASC;
         """
-    pop_age = duckdb.sql(pop_age_q).df()
+    pop_age = con.execute(pop_age_q).df()
 
     # CSS pour le style des métriques
     st.markdown(
