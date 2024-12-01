@@ -28,10 +28,10 @@ Preface stand-alone A4
 
 
 # 3- Achievements
-    - stand-alone A4.pdf
-    - Streamlit app: <a href="https://freuxy-as-dataviz-app-hioxtj.streamlit.app/">Click here </a>
+  ### * stand-alone A4.pdf
+  ### * Streamlit app: <a href="https://freuxy-as-dataviz-app-hioxtj.streamlit.app/">Click here </a>
 # 4- Installation
-    To use Command Line Interface:
+    You can also install it locally:
     Please execute these commands in the terminal:
 
     -> git clone https://github.com/freuxy/AS_dataviz.git
